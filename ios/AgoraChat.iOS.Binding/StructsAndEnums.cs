@@ -1,0 +1,4 @@
+namespace AgoraChat.iOS.Binding
+{
+
+}

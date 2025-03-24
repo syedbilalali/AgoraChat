@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgoraChat.App.Test", "AgoraChat.App.Test\AgoraChat.App.Test.csproj", "{7C4574F2-43DA-45D1-97F6-46D56751AFB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgoraChat.Android.Binding", "android\AgoraChat.Android.Binding\AgoraChat.Android.Binding.csproj", "{AF0FC960-EC8F-4274-887A-63FB9836936C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgoraChat.iOS.Binding", "ios\AgoraChat.iOS.Binding\AgoraChat.iOS.Binding.csproj", "{22BD3F85-F11C-435F-BBA0-90AD2C1095CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C4574F2-43DA-45D1-97F6-46D56751AFB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C4574F2-43DA-45D1-97F6-46D56751AFB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C4574F2-43DA-45D1-97F6-46D56751AFB5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7C4574F2-43DA-45D1-97F6-46D56751AFB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C4574F2-43DA-45D1-97F6-46D56751AFB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF0FC960-EC8F-4274-887A-63FB9836936C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF0FC960-EC8F-4274-887A-63FB9836936C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF0FC960-EC8F-4274-887A-63FB9836936C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF0FC960-EC8F-4274-887A-63FB9836936C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22BD3F85-F11C-435F-BBA0-90AD2C1095CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22BD3F85-F11C-435F-BBA0-90AD2C1095CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22BD3F85-F11C-435F-BBA0-90AD2C1095CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22BD3F85-F11C-435F-BBA0-90AD2C1095CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
