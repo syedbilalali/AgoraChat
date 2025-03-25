@@ -1,17 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net9.0-android</TargetFramework>
-    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <!--
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net9.0-android</TargetFramework>
+		<SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<!--
       Enable trim analyzers for Android class libraries.
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
     -->
-    <IsTrimmable>true</IsTrimmable>
-    <!--
+		<IsTrimmable>true</IsTrimmable>
+		<RootNamespace>AgoraChatSDK</RootNamespace>
+		<!--
       NOTE: you can simply add .aar or .jar files in this directory to be included in the project.
       To learn more, see: https://learn.microsoft.com/dotnet/maui/migration/android-binding-projects
     -->
-  </PropertyGroup>
+	</PropertyGroup>
+	<ItemGroup>
+		<AndroidGradleProject Include="../native/build.gradle.kts" Bind="true" Visibile="false">
+			<ModuleName>app</ModuleName>
+			<!-- Metadata applicable to @(AndroidLibrary) will be used if set, otherwise the following defaults will be used:
+      <Bind>true</Bind>
+      <Pack>true</Pack>
+      -->
+		</AndroidGradleProject>
+	</ItemGroup>
+	<ItemGroup>
+	  <AndroidLibrary Update="Jars\agorachat_1.3.1.jar" Visible="true" Bind="true" />
+	</ItemGroup>
 </Project>

@@ -21,6 +21,9 @@ public class ChatConfiguration {
           agoraChatClient = ChatClient.getInstance();
           agoraChatClient.init(context , option);
           agoraChatClient.setDebugMode(debugMode);
+
+
+
     }
     public void init(Context context , @NonNull String appKey){
 

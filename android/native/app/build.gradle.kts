@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.library")
 }
 
 android {
@@ -7,9 +7,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.agora.mauiagorachat"
-        minSdk = 29
-        targetSdk = 34
+        minSdk = 21
     }
 
     buildTypes {

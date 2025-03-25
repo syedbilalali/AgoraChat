@@ -5,6 +5,17 @@
         public App()
         {
             InitializeComponent();
+
+#if ANDROID
+                ChatConfiguration chatConfiguration = new ChatConfiguration();
+                chatConfiguration.Init(Platform.AppContext, "fsjfjhf");
+
+                var chatClient = IO.Agora.Chat.ChatClient.Instance;
+            chatClient.Init(Platform.AppContext, new IO.Agora.Chat.ChatOptions
+                ()
+            { });
+
+#endif
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
