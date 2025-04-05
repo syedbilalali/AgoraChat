@@ -1,15 +1,31 @@
 ﻿<metadata>
 
 	<attr path="/api/package[@name='com.agora.mauiagorachat']" name="managedName">AgoraChat</attr>
+	
+	<!-- Below Attribute is use remove the duplication or ambiguity errors-->
+	
+	<!-- IO.Agora.Chat.ChatClient.cs(1856,63): error CS0102: The type 'ChatClient' already contains a definition for 'LogoutEvent' -->
+	<attr path="/api/package[@name='io.agora.chat']/class[@name='ChatClient']/method[@name='logout' and count(parameter)=1 and parameter[1][@type='boolean']]" name="managedName">LogoutWithBolean</attr>
+	
+	<!---IO.Agora.Chat.ChatClient.cs(1873,63): error CS0102: The type 'ChatClient' already contains a definition for 'LogoutEvent'-->
+	<attr path="/api/package[@name='io.agora.chat']/class[@name='ChatClient']/method[@name='logout' and count(parameter)=2 and parameter[1][@type='boolean'] and parameter[2][@type='io.agora.CallBack']]" name="managedName">LogoutWithCallBack</attr>
+	
+	<!-- IO.Agora.IConnectionListener.cs(407,41): error CS0102: The type 'IConnectionListenerImplementor' already contains a definition for 'OnLogoutHandler' -->
+	<attr path="/api/package[@name='io.agora']/interface[@name='ConnectionListener']/method[@name='onLogout' and count(parameter)=1 and parameter[1][@type='int']]" name="eventName"></attr>
+	
+	<!-- IO.Agora.IConnectionListener.cs(418,41): error CS0102: The type 'IConnectionListenerImplementor' already contains a definition for 'OnLogoutHandler'-->
+	<attr path="/api/package[@name='io.agora']/interface[@name='ConnectionListener']/method[@name='onLogout' and count(parameter)=2 and parameter[1][@type='int'] and parameter[2][@type='java.lang.String']]" name="eventName"></attr>
+	
 
-	<remove-node path="/api/package[@name='io.agora']/class[@name='AdminAddedEventArgs']"   />
+	<!-- Currently we are not support below option in the sdk, upcoming we will the below errors -->
+	<remove-node path="/api/package[@name='io.agora']/interface[@name='GroupChangeListener']" />
+	<remove-node path="/api/package[@name='io.agora.util']/class[@name='FileUtils.MyComparator']"   />
+	<remove-node path="/api/package[@name='io.agora']/interface[@name='ChatRoomChangeListener']"/>
   <!--
   This sample removes the class: android.support.v4.content.AsyncTaskLoader.LoadTask:
   <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='AsyncTaskLoader.LoadTask']" />
   
   This sample removes the method: android.support.v4.content.CursorLoader.loadInBackground:
   <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
-  
-  
   -->
 </metadata>
