@@ -79,8 +79,12 @@
 		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.2" />
 	</ItemGroup>
 
-	<ItemGroup Condition="$(TargetFramework.Contains('android'))">
+	<!--<ItemGroup Condition="$(TargetFramework.Contains('android'))">
 	  <ProjectReference Include="..\android\AgoraChat.Android.Binding\AgoraChat.Android.Binding.csproj" />
+	</ItemGroup>-->
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Agora.Chat.Maui\Agora.Chat.Maui.csproj" />
 	</ItemGroup>
 	
 </Project>

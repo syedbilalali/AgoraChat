@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui;
+﻿using Agora.Chat.Maui;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
 
@@ -12,6 +13,7 @@ namespace AgoraChat.App.Test
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseAgora()
                 .ConfigureSyncfusionToolkit()
                 .ConfigureMauiHandlers(handlers =>
                 {
