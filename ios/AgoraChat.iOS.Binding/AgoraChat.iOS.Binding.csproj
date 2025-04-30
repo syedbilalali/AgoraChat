@@ -10,10 +10,39 @@
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
     -->
     <IsTrimmable>true</IsTrimmable>
+    <NoBindingEmbedding>true</NoBindingEmbedding>
   </PropertyGroup>
-
   <ItemGroup>
-    <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+    <NativeReference Include="../native/AgoraChat.xcframework">
+      <Kind>Framework</Kind>
+      <SmartLink>true</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <SharpieBind>true</SharpieBind>
+    </NativeReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="ApiDefinitions.cs" />
     <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
   </ItemGroup>
+  <!-- Reference to Xcode project -->
+  <ItemGroup>
+    <NLIXcodeProjectReference Include="../native/AgoraChats/AgoraChats.xcodeproj">
+      <SchemeName>AgoraChats</SchemeName>
+      <SharpieNamespace>HotCoffee.AgoraChat.iOS</SharpieNamespace>
+      <SharpieBind>true</SharpieBind>
+      <Kind>Framework</Kind>
+      <SmartLink>true</SmartLink>
+      <!-- Metadata applicable to @(NativeReference) will be used if set, otherwise the following defaults will be used:
+      
+      -->
+    </NLIXcodeProjectReference>
+  </ItemGroup>
+  <!--
+  <ObjcBindingCoreSource Include="StructsAndEnums.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </ObjcBindingCoreSource>
+    <ObjcBindingCoreSource Include="ApiDefinitions.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </ObjcBindingCoreSource>
+  -->
 </Project>
