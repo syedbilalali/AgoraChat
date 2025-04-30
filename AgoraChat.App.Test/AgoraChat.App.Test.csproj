@@ -48,6 +48,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>-->
 	</PropertyGroup>
 
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -79,8 +87,28 @@
 		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.2" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="AgoraChat.iOS.Binding">
+	    <HintPath>..\ios\AgoraChat.iOS.Binding\bin\Release\net9.0-ios\AgoraChat.iOS.Binding.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<!--
 	<ItemGroup Condition="$(TargetFramework.Contains('android'))">
 	  <ProjectReference Include="..\android\AgoraChat.Android.Binding\AgoraChat.Android.Binding.csproj" />
 	</ItemGroup>
+	
+	
+	
+    -->
+   <!--
+   
+   <ItemGroup Condition="$(TargetFramework.Contains('ios'))">
+		<ProjectReference Include="..\ios\AgoraChat.iOS.Binding\AgoraChat.iOS.Binding.csproj" />
+	</ItemGroup>
+   			<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui.NativeLibraryInterop.BuildTasks" Version="0.0.1-pre1" PrivateAssets="all" />
+	</ItemGroup>
+   -->
 	
 </Project>
