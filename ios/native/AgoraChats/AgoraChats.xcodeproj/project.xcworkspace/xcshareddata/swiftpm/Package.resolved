@@ -1,0 +1,15 @@
+{
+  "originHash" : "7008c2e281f54ee8f68654be9d319da19cd93ebea38807ed641cca60668d2936",
+  "pins" : [
+    {
+      "identity" : "agorachat_ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AgoraIO/AgoraChat_iOS.git",
+      "state" : {
+        "revision" : "0060fe02b24b6b99cb115c8520f9858f00f56c0e",
+        "version" : "1.3.1"
+      }
+    }
+  ],
+  "version" : 3
+}
