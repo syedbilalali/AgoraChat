@@ -10,8 +10,8 @@
 
 // In this header, you should import all the public headers of your framework using statements like #import <AgoraChat/PublicHeader.h>
 
-#import <AgoraChat/AgoraChatClient.h>
-#import <AgoraChat/AgoraChatClientDelegate.h>
-#import <AgoraChat/AgoraChatMultiDevicesDelegate.h>
-#import <AgoraChat/AgoraChatMessageReactionChange.h>
-#import <AgoraChat/AgoraChatMessageReaction.h>
+#import "AgoraChatClient.h"
+#import "AgoraChatClientDelegate.h"
+#import "AgoraChatMultiDevicesDelegate.h"
+#import "AgoraChatMessageReactionChange.h"
+#import "AgoraChatMessageReaction.h"

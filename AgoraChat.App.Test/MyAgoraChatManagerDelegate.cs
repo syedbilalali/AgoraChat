@@ -1,3 +1,4 @@
+#if IOS
 using HotCoffee.AgoraChat.iOS;
 
 namespace AgoraChat.App.Test;
@@ -10,3 +11,4 @@ public class MyAgoraChatManagerDelegate : AgoraChatManagerDelegate
        base.MessagesDidReceive(aMessages);
     }
 }
+#endif

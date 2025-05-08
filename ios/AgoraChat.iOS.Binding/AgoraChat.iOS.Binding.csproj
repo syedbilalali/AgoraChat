@@ -1,48 +1,72 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net9.0-ios</TargetFramework>
+    <TargetPlatformVersion>18.2</TargetPlatformVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
-
     <!--
+      <NoBindingEmbedding>false</NoBindingEmbedding>
       Enable trim analyzers for class libraries.
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
     -->
-    <IsTrimmable>true</IsTrimmable>
-    <NoBindingEmbedding>true</NoBindingEmbedding>
+    <IsTrimmable>false</IsTrimmable>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <NativeReference Include="../native/AgoraChat.xcframework">
-      <Kind>Framework</Kind>
-      <SmartLink>true</SmartLink>
-      <ForceLoad>True</ForceLoad>
-      <SharpieBind>true</SharpieBind>
-    </NativeReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ObjcBindingApiDefinition Include="ApiDefinitions.cs" />
     <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
   </ItemGroup>
-  <!-- Reference to Xcode project -->
   <ItemGroup>
-    <NLIXcodeProjectReference Include="../native/AgoraChats/AgoraChats.xcodeproj">
-      <SchemeName>AgoraChats</SchemeName>
-      <SharpieNamespace>HotCoffee.AgoraChat.iOS</SharpieNamespace>
-      <SharpieBind>true</SharpieBind>
+    <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TrimMode>full</TrimMode>
+  </PropertyGroup>
+  <ItemGroup>
+    <NativeReference Include="../native/AgoraChat.xcframework/ios-arm64/AgoraChat.framework">
       <Kind>Framework</Kind>
-      <SmartLink>true</SmartLink>
-      <!-- Metadata applicable to @(NativeReference) will be used if set, otherwise the following defaults will be used:
-      
-      -->
-    </NLIXcodeProjectReference>
+      <SmartLink>false</SmartLink>
+      <ForceLoad>true</ForceLoad>
+    </NativeReference>
   </ItemGroup>
   <!--
-  <ObjcBindingCoreSource Include="StructsAndEnums.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </ObjcBindingCoreSource>
-    <ObjcBindingCoreSource Include="ApiDefinitions.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </ObjcBindingCoreSource>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />
+  
+   <IsCxx>false</IsCxx>
+      <ExtraLinkerFlags>-ObjC</ExtraLinkerFlags>
+      
+      <Frameworks>Foundation UIKit</Frameworks>
+  
+  /Users/medina/Desktop/AgoraChat/AgoraChat/ios
+  /Users/medina/Desktop/AgoraChat/AgoraChat/ios/native/AgoraChat.xcframework/ios-arm64
+  
+  /Users/medina/Desktop/AgoraChat/AgoraChat/ios/native/AgoraChat.xcframework/ios-arm64
+  
+  
+   <NativeReference Include="..\..\..\..\Desktop\AgoraChat\AgoraChat\ios\native\AgoraChat.xcframework">
+      <Kind>Framework</Kind>
+      
+      <SmartLink>false</SmartLink>
+      <ForceLoad>true</ForceLoad>
+     
+    </NativeReference>
+  </ItemGroup>
   -->
 </Project>

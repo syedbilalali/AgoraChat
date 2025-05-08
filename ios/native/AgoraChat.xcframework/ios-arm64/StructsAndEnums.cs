@@ -128,7 +128,7 @@ namespace HotCoffee.AgoraChat.iOS
 	public enum AgoraChatConnectionState : long
 	{
 		Connected = 0,
-		Disconnected = 1
+		Disconnected
 	}
 
 	[Native]
