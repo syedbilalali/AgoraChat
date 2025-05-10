@@ -40,7 +40,7 @@
     <TrimMode>full</TrimMode>
   </PropertyGroup>
   <ItemGroup>
-    <NativeReference Include="../native/AgoraChat.xcframework/ios-arm64/AgoraChat.framework">
+    <NativeReference Include="../native/AgoraChat.xcframework">
       <Kind>Framework</Kind>
       <SmartLink>false</SmartLink>
       <ForceLoad>true</ForceLoad>

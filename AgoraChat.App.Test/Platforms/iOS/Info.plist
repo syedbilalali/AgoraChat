@@ -32,5 +32,11 @@
 	<array>
 		<string>fetch</string>
 	</array>
+	<key>IDEDidComputeMac32BitWarning</key>
+	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Access the microphone.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Access the camera.</string>
 </dict>
 </plist>

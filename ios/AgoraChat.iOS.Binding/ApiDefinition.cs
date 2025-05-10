@@ -246,7 +246,7 @@ namespace HotCoffee.AgoraChat.iOS
 	
 	// @interface AgoraChatClient : NSObject
 	[BaseType (typeof(NSObject), Name = "AgoraChatClient")]
-	[DisableDefaultCtor]
+	//[DisableDefaultCtor]
 	interface AgoraChatClient
 	{
 		// @property (readonly, nonatomic, strong) NSString * _Nonnull version;
@@ -460,12 +460,12 @@ namespace HotCoffee.AgoraChat.iOS
 		void Log (string aLog);
 
 		// -(void)addLogDelegate:(id<AgoraChatLogDelegate> _Nonnull)aDelegate delegateQueue:(dispatch_queue_t _Nullable)aQueue __attribute__((swift_name("addLog(delegate:queue:)")));
-		//[Export ("addLogDelegate:delegateQueue:")]
-		//void AddLogDelegate (AgoraChatLogDelegate aDelegate, [NullAllowed] DispatchQueue aQueue);
+		[Export ("addLogDelegate:delegateQueue:")]
+		void AddLogDelegate (AgoraChatLogDelegate aDelegate, [NullAllowed] DispatchQueue aQueue);
 
 		// -(void)removeLogDelegate:(id<AgoraChatLogDelegate> _Nonnull)aDelegate __attribute__((swift_name("removeLog(delegate:)")));
-	//	[Export ("removeLogDelegate:")]
-	//	void RemoveLogDelegate (AgoraChatLogDelegate aDelegate);
+	    [Export ("removeLogDelegate:")]
+	    void RemoveLogDelegate (AgoraChatLogDelegate aDelegate);
 
 		// -(NSArray<AgoraChatDeviceConfig *> * _Nullable)getLoggedInDevicesFromServerWithUsername:(NSString * _Nonnull)aUsername password:(NSString * _Nonnull)aPassword error:(AgoraChatError ** _Nullable)pError;
 		//[Export ("getLoggedInDevicesFromServerWithUsername:password:error:")]
@@ -609,7 +609,8 @@ namespace HotCoffee.AgoraChat.iOS
 	}
 	
 	// @protocol AgoraChatManagerDelegate <NSObject>
-	[Protocol, Model]
+	//[Protocol, Model]
+	[Protocol][Model]
 	[BaseType (typeof(NSObject), Name = "AgoraChatManagerDelegate")]
 	interface AgoraChatManagerDelegate
 	{
@@ -666,17 +667,18 @@ namespace HotCoffee.AgoraChat.iOS
 		//void OnMessagePinChanged (string messageId, string conversationId, AgoraChatMessagePinOperation pinOperation, AgoraChatMessagePinInfo pinInfo);
 
 		// @optional -(void)messagesDidRecall:(NSArray *)aMessages __attribute__((deprecated("Use -messagesInfoDidRecall: instead")));
-		[Export ("messagesDidRecall:")]
+		//[Export ("messagesDidRecall:")]
 		//[Verify (StronglyTypedNSArray)]
-		void MessagesDidRecall (NSObject[] aMessages);
+		//void MessagesDidRecall (NSObject[] aMessages);
 
 		// @optional -(void)messageReactionDidChange:(NSArray<AgoraChatMessageReactionChange *> * _Nonnull)changes;
 		//[Export ("messageReactionDidChange:")]
 		//void MessageReactionDidChange (AgoraChatMessageReactionChange[] changes);
 	}
 	// @interface AgoraChatMessage : NSObject
+	[Protocol]
 	[BaseType (typeof(NSObject), Name = "AgoraChatMessage")]
-	interface AgoraChatMessage : INativeObject,INSCopying
+	interface AgoraChatMessage : INativeObject 
 	{
 		// @property (copy, nonatomic) NSString * _Nonnull messageId;
 		[Export ("messageId")]
@@ -751,13 +753,13 @@ namespace HotCoffee.AgoraChat.iOS
 		AgoraChatMessageBody Body { get; set; }
 
 		// @property (readonly, nonatomic) NSArray<AgoraChatMessageReaction *> * _Nullable reactionList;
-		[NullAllowed, Export ("reactionList")]
-		AgoraChatMessageReaction[] ReactionList { get; }
+		//[NullAllowed, Export ("reactionList")]
+		//AgoraChatMessageReaction[] ReactionList { get; }
 
 		// -(AgoraChatMessageReaction * _Nullable)getReaction:(NSString * _Nonnull)reaction;
-		[Export ("getReaction:")]
-		[return: NullAllowed]
-		AgoraChatMessageReaction GetReaction (string reaction);
+		//[Export ("getReaction:")]
+		//[return: NullAllowed]
+		//AgoraChatMessageReaction GetReaction (string reaction);
 
 		// @property (copy, nonatomic) NSDictionary * _Nullable ext;
 		[NullAllowed, Export ("ext", ArgumentSemantic.Copy)]
@@ -792,12 +794,12 @@ namespace HotCoffee.AgoraChat.iOS
 		AgoraChatMessagePinInfo PinnedInfo { get; }
 
 		// -(instancetype _Nonnull)initWithConversationID:(NSString * _Nonnull)aConversationId from:(NSString * _Nonnull)aFrom to:(NSString * _Nonnull)aTo body:(AgoraChatMessageBody * _Nonnull)aBody ext:(NSDictionary * _Nullable)aExt;
-		//[Export ("initWithConversationID:from:to:body:ext:")]
-	//	NativeHandle Constructor (string aConversationId, string aFrom, string aTo, AgoraChatMessageBody aBody, [NullAllowed] NSDictionary aExt);
+		[Export ("initWithConversationID:from:to:body:ext:")]
+	    NativeHandle Constructor (string aConversationId, string aFrom, string aTo, AgoraChatMessageBody aBody, [NullAllowed] NSDictionary aExt);
 
 		// -(instancetype _Nonnull)initWithConversationID:(NSString * _Nonnull)aConversationId body:(AgoraChatMessageBody * _Nonnull)aBody ext:(NSDictionary * _Nullable)aExt;
-		//[Export ("initWithConversationID:body:ext:")]
-		//NativeHandle Constructor (string aConversationId, AgoraChatMessageBody aBody, [NullAllowed] NSDictionary aExt);
+		[Export ("initWithConversationID:body:ext:")]
+		NativeHandle Constructor (string aConversationId, AgoraChatMessageBody aBody, [NullAllowed] NSDictionary aExt);
 	}
 	// @interface AgoraChatMessagePinInfo : NSObject
 	[BaseType (typeof(NSObject))]
@@ -902,341 +904,354 @@ namespace HotCoffee.AgoraChat.iOS
   be used.
 */ // [Protocol]
 	
-	[Protocol]
-	[BaseType (typeof(NSObject), Name = "IAgoraChatManager")]
+  //  [Model, Protocol]
+    
+   // [Protocol(),Model]
+   
+   
+   
+    [Protocol]
+   // [Model()][Protocol (Name = "AgoraChatManager")]
+	[BaseType (typeof(NSObject))]
+	//[Export ("chatManager", ArgumentSemantic.Strong)]
 	interface IAgoraChatManager
-	{
+	{   
+		// -(instancetype _Nonnull)init:();
+	//	[Export ("init")]
+	//	NativeHandle Constructor ();
+
 		// @required -(void)addDelegate:(id<AgoraChatManagerDelegate> _Nullable)aDelegate delegateQueue:(dispatch_queue_t _Nullable)aQueue;
-		[Abstract]
+		//[Abstract]
 		[Export ("addDelegate:delegateQueue:")]
 		void AddDelegate ([NullAllowed] AgoraChatManagerDelegate aDelegate, [NullAllowed] DispatchQueue aQueue);
-
+	
 		// @required -(void)removeDelegate:(id<AgoraChatManagerDelegate> _Nonnull)aDelegate;
-		[Abstract]
+		//[Abstract]
 		[Export ("removeDelegate:")]
 		void RemoveDelegate (AgoraChatManagerDelegate aDelegate);
-
+		
 		// @required -(NSArray<AgoraChatConversation *> * _Nullable)getAllConversations;
 		[Abstract]
 		[NullAllowed, Export ("getAllConversations")]
 		//[Verify (MethodToProperty)]
 		AgoraChatConversation[] AllConversations { get; }
-
-		// @required -(NSArray<AgoraChatConversation *> * _Nullable)filterConversationsFromDB:(BOOL)cleanMemoryCache filter:(BOOL (^ _Nullable)(AgoraChatConversation * _Nonnull))filter __attribute__((swift_name("filterConversationsFromDB(cleanMemoryCache:filter:)")));
+		
+		//3 // @required -(NSArray<AgoraChatConversation *> * _Nullable)filterConversationsFromDB:(BOOL)cleanMemoryCache filter:(BOOL (^ _Nullable)(AgoraChatConversation * _Nonnull))filter __attribute__((swift_name("filterConversationsFromDB(cleanMemoryCache:filter:)")));
 		[Abstract]
 		[Export ("filterConversationsFromDB:filter:")]
 		[return: NullAllowed]
 		AgoraChatConversation[] FilterConversationsFromDB (bool cleanMemoryCache, [NullAllowed] Func<AgoraChatConversation, bool> filter);
-
+		
 		// @required -(void)cleanConversationsMemoryCache;
 		[Abstract]
 		[Export ("cleanConversationsMemoryCache")]
 		void CleanConversationsMemoryCache ();
-
+		
 		// @required -(NSArray<AgoraChatConversation *> * _Nullable)getAllConversations:(BOOL)isSort;
 		[Abstract]
 		[Export ("getAllConversations:")]
 		[return: NullAllowed]
 		AgoraChatConversation[] GetAllConversations (bool isSort);
-
-		// @required -(void)getConversationsFromServer:(void (^ _Nullable)(NSArray<AgoraChatConversation *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock __attribute__((deprecated("")));
+		
+		// 4// @required -(void)getConversationsFromServer:(void (^ _Nullable)(NSArray<AgoraChatConversation *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock __attribute__((deprecated("")));
 		[Abstract]
 		[Export ("getConversationsFromServer:")]
 		void GetConversationsFromServer ([NullAllowed] Action<NSArray<AgoraChatConversation>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)getConversationsFromServerByPage:(NSUInteger)pageNumber pageSize:(NSUInteger)pageSize completion:(void (^ _Nullable)(NSArray<AgoraChatConversation *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock __attribute__((deprecated("")));
 		[Abstract]
 		[Export ("getConversationsFromServerByPage:pageSize:completion:")]
 		void GetConversationsFromServerByPage (nuint pageNumber, nuint pageSize, [NullAllowed] Action<NSArray<AgoraChatConversation>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)getConversationsFromServerWithCursor:(NSString * _Nullable)cursor pageSize:(UInt8)pageSize completion:(void (^ _Nonnull)(AgoraChatCursorResult<AgoraChatConversation *> * _Nullable, AgoraChatError * _Nullable))completionBlock;
 		[Abstract]
 		[Export ("getConversationsFromServerWithCursor:pageSize:completion:")]
 		void GetConversationsFromServerWithCursor ([NullAllowed] string cursor, byte pageSize, Action<AgoraChatCursorResult<AgoraChatConversation>, AgoraChatError> completionBlock);
-
-		// @required -(void)getPinnedConversationsFromServerWithCursor:(NSString * _Nullable)cursor pageSize:(UInt8)limit completion:(void (^ _Nonnull)(AgoraChatCursorResult<AgoraChatConversation *> * _Nullable, AgoraChatError * _Nullable))completionBlock;
+		
+		// 5// @required -(void)getPinnedConversationsFromServerWithCursor:(NSString * _Nullable)cursor pageSize:(UInt8)limit completion:(void (^ _Nonnull)(AgoraChatCursorResult<AgoraChatConversation *> * _Nullable, AgoraChatError * _Nullable))completionBlock;
 		[Abstract]
 		[Export ("getPinnedConversationsFromServerWithCursor:pageSize:completion:")]
 		void GetPinnedConversationsFromServerWithCursor ([NullAllowed] string cursor, byte limit, Action<AgoraChatCursorResult<AgoraChatConversation>, AgoraChatError> completionBlock);
-
+		
 		// @required -(void)pinConversation:(NSString * _Nonnull)conversationId isPinned:(BOOL)isPinned completionBlock:(void (^ _Nullable)(AgoraChatError * _Nullable))completionBlock;
 		[Abstract]
 		[Export ("pinConversation:isPinned:completionBlock:")]
 		void PinConversation (string conversationId, bool isPinned, [NullAllowed] Action<AgoraChatError> completionBlock);
-
+		
 		// @required -(AgoraChatConversation * _Nullable)getConversationWithConvId:(NSString * _Nullable)aConversationId;
 		[Abstract]
 		[Export ("getConversationWithConvId:")]
 		[return: NullAllowed]
 		AgoraChatConversation GetConversationWithConvId ([NullAllowed] string aConversationId);
-
+		
 		// @required -(AgoraChatConversation * _Nullable)getConversation:(NSString * _Nonnull)aConversationId type:(AgoraChatConversationType)aType createIfNotExist:(BOOL)aIfCreate;
 		[Abstract]
 		[Export ("getConversation:type:createIfNotExist:")]
 		[return: NullAllowed]
 		AgoraChatConversation GetConversation (string aConversationId, AgoraChatConversationType aType, bool aIfCreate);
-
+		
 		// @required -(AgoraChatConversation * _Nullable)getConversation:(NSString * _Nonnull)aConversationId type:(AgoraChatConversationType)aType createIfNotExist:(BOOL)aIfCreate isThread:(BOOL)isThread;
 		[Abstract]
 		[Export ("getConversation:type:createIfNotExist:isThread:")]
 		[return: NullAllowed]
 		AgoraChatConversation GetConversation (string aConversationId, AgoraChatConversationType aType, bool aIfCreate, bool isThread);
-
-		// @required -(void)deleteConversation:(NSString * _Nonnull)aConversationId isDeleteMessages:(BOOL)aIsDeleteMessages completion:(void (^ _Nullable)(NSString * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
+		
+		// 6// @required -(void)deleteConversation:(NSString * _Nonnull)aConversationId isDeleteMessages:(BOOL)aIsDeleteMessages completion:(void (^ _Nullable)(NSString * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("deleteConversation:isDeleteMessages:completion:")]
 		void DeleteConversation (string aConversationId, bool aIsDeleteMessages, [NullAllowed] Action<NSString, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)deleteServerConversation:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType isDeleteServerMessages:(BOOL)aIsDeleteServerMessages completion:(void (^ _Nullable)(NSString * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("deleteServerConversation:conversationType:isDeleteServerMessages:completion:")]
 		void DeleteServerConversation (string aConversationId, AgoraChatConversationType aConversationType, bool aIsDeleteServerMessages, [NullAllowed] Action<NSString, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)deleteConversations:(NSArray<AgoraChatConversation *> * _Nullable)aConversations isDeleteMessages:(BOOL)aIsDeleteMessages completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("deleteConversations:isDeleteMessages:completion:")]
 		void DeleteConversations ([NullAllowed] AgoraChatConversation[] aConversations, bool aIsDeleteMessages, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)importConversations:(NSArray<AgoraChatConversation *> * _Nullable)aConversations completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("importConversations:completion:")]
 		void ImportConversations ([NullAllowed] AgoraChatConversation[] aConversations, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(AgoraChatMessage * _Nullable)getMessageWithMessageId:(NSString * _Nonnull)aMessageId;
 		[Abstract]
 		[Export ("getMessageWithMessageId:")]
 		[return: NullAllowed]
 		AgoraChatMessage GetMessageWithMessageId (string aMessageId);
-
-		// @required -(NSString * _Nullable)getMessageAttachmentPath:(NSString * _Nonnull)aConversationId;
+		
+		// 7// @required -(NSString * _Nullable)getMessageAttachmentPath:(NSString * _Nonnull)aConversationId;
 		[Abstract]
 		[Export ("getMessageAttachmentPath:")]
 		[return: NullAllowed]
 		string GetMessageAttachmentPath (string aConversationId);
-
+		
 		// @required -(void)importMessages:(NSArray<AgoraChatMessage *> * _Nonnull)aMessages completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("importMessages:completion:")]
 		void ImportMessages (AgoraChatMessage[] aMessages, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)updateMessage:(AgoraChatMessage * _Nonnull)aMessage completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("updateMessage:completion:")]
 		void UpdateMessage (AgoraChatMessage aMessage, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)modifyMessage:(NSString * _Nonnull)messageId body:(AgoraChatMessageBody * _Nonnull)body completion:(void (^ _Nonnull)(AgoraChatError * _Nullable, AgoraChatMessage * _Nullable))completionBlock;
 		[Abstract]
 		[Export ("modifyMessage:body:completion:")]
 		void ModifyMessage (string messageId, AgoraChatMessageBody body, Action<AgoraChatError, AgoraChatMessage> completionBlock);
-
+		
 		// @required -(void)sendMessageReadAck:(NSString * _Nonnull)aMessageId toUser:(NSString * _Nonnull)aUsername completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("sendMessageReadAck:toUser:completion:")]
 		void SendMessageReadAck (string aMessageId, string aUsername, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
-		// @required -(void)sendGroupMessageReadAck:(NSString * _Nonnull)aMessageId toGroup:(NSString * _Nonnull)aGroupId content:(NSString * _Nullable)aContent completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
+		
+		// 8// @required -(void)sendGroupMessageReadAck:(NSString * _Nonnull)aMessageId toGroup:(NSString * _Nonnull)aGroupId content:(NSString * _Nullable)aContent completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
-		[Export ("sendGroupMessageReadAck:toGroup:content:completion:")]
-		void SendGroupMessageReadAck (string aMessageId, string aGroupId, [NullAllowed] string aContent, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
-		// @required -(void)ackConversationRead:(NSString * _Nonnull)conversationId completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
-		[Abstract]
-		[Export ("ackConversationRead:completion:")]
-		void AckConversationRead (string conversationId, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
-		// @required -(void)recallMessageWithMessageId:(NSString * _Nonnull)aMessageId completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
-		[Abstract]
-		[Export ("recallMessageWithMessageId:completion:")]
-		void RecallMessageWithMessageId (string aMessageId, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
-		// @required -(void)recallMessageWithMessageId:(NSString * _Nonnull)aMessageId ext:(NSString * _Nullable)ext completion:(void (^ _Nonnull)(AgoraChatError * _Nullable))aCompletionBlock;
-		[Abstract]
-		[Export ("recallMessageWithMessageId:ext:completion:")]
-		void RecallMessageWithMessageId (string aMessageId, [NullAllowed] string ext, Action<AgoraChatError> aCompletionBlock);
-
-		// @required -(void)sendMessage:(AgoraChatMessage * _Nonnull)aMessage progress:(void (^ _Nullable)(int))aProgressBlock completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
-		[Abstract]
-		[Export ("sendMessage:progress:completion:")]
-		void SendMessage (AgoraChatMessage aMessage, [NullAllowed] Action<int> aProgressBlock, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
-
-		// @required -(void)resendMessage:(AgoraChatMessage * _Nonnull)aMessage progress:(void (^ _Nullable)(int))aProgressBlock completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
-		[Abstract]
-		[Export ("resendMessage:progress:completion:")]
-		void ResendMessage (AgoraChatMessage aMessage, [NullAllowed] Action<int> aProgressBlock, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
-
-		// @required -(void)downloadMessageThumbnail:(AgoraChatMessage * _Nonnull)aMessage progress:(void (^ _Nullable)(int))aProgressBlock completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
-		[Abstract]
-		[Export ("downloadMessageThumbnail:progress:completion:")]
-		void DownloadMessageThumbnail (AgoraChatMessage aMessage, [NullAllowed] Action<int> aProgressBlock, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
-
-		// @required -(void)downloadMessageAttachment:(AgoraChatMessage * _Nonnull)aMessage progress:(void (^ _Nullable)(int))aProgressBlock completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
-		[Abstract]
-		[Export ("downloadMessageAttachment:progress:completion:")]
-		void DownloadMessageAttachment (AgoraChatMessage aMessage, [NullAllowed] Action<int> aProgressBlock, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
-
-		// @required -(void)downloadAndParseCombineMessage:(AgoraChatMessage * _Nonnull)aMessage completion:(void (^ _Nullable)(NSArray<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
-		[Abstract]
-		[Export ("downloadAndParseCombineMessage:completion:")]
+          		[Export ("sendGroupMessageReadAck:toGroup:content:completion:")]
+          		void SendGroupMessageReadAck (string aMessageId, string aGroupId, [NullAllowed] string aContent, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
+          		
+          		// @required -(void)ackConversationRead:(NSString * _Nonnull)conversationId completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
+          		[Abstract]
+          		[Export ("ackConversationRead:completion:")]
+          		void AckConversationRead (string conversationId, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
+          		
+          		// @required -(void)recallMessageWithMessageId:(NSString * _Nonnull)aMessageId completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
+          		[Abstract]
+          		[Export ("recallMessageWithMessageId:completion:")]
+          		void RecallMessageWithMessageId (string aMessageId, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
+          		
+          		// @required -(void)recallMessageWithMessageId:(NSString * _Nonnull)aMessageId ext:(NSString * _Nullable)ext completion:(void (^ _Nonnull)(AgoraChatError * _Nullable))aCompletionBlock;
+          		[Abstract]
+          		[Export ("recallMessageWithMessageId:ext:completion:")]
+          		void RecallMessageWithMessageId (string aMessageId, [NullAllowed] string ext, Action<AgoraChatError> aCompletionBlock);
+          		
+          		// @required -(void)sendMessage:(AgoraChatMessage * _Nonnull)aMessage progress:(void (^ _Nullable)(int))aProgressBlock completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
+          		//[Abstract]
+          		[Export ("sendMessage:progress:completion:")]
+          		void SendMessage (AgoraChatMessage aMessage, [NullAllowed] Action<int> aProgressBlock, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
+          		
+          		// @required -(void)resendMessage:(AgoraChatMessage * _Nonnull)aMessage progress:(void (^ _Nullable)(int))aProgressBlock completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
+          		[Abstract]
+          		[Export ("resendMessage:progress:completion:")]
+          		void ResendMessage (AgoraChatMessage aMessage, [NullAllowed] Action<int> aProgressBlock, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
+          		
+		// 9// @required -(void)downloadMessageThumbnail:(AgoraChatMessage * _Nonnull)aMessage progress:(void (^ _Nullable)(int))aProgressBlock completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
+		 [Abstract]
+		 [Export ("downloadMessageThumbnail:progress:completion:")]
+		 void DownloadMessageThumbnail (AgoraChatMessage aMessage, [NullAllowed] Action<int> aProgressBlock, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
+		//
+		 // @required -(void)downloadMessageAttachment:(AgoraChatMessage * _Nonnull)aMessage progress:(void (^ _Nullable)(int))aProgressBlock completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
+		 [Abstract]
+		 [Export ("downloadMessageAttachment:progress:completion:")]
+		 void DownloadMessageAttachment (AgoraChatMessage aMessage, [NullAllowed] Action<int> aProgressBlock, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
+		
+		// // @required -(void)downloadAndParseCombineMessage:(AgoraChatMessage * _Nonnull)aMessage completion:(void (^ _Nullable)(NSArray<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
+		 [Abstract]
+		 [Export ("downloadAndParseCombineMessage:completion:")]
 		void DownloadAndParseCombineMessage (AgoraChatMessage aMessage, [NullAllowed] Action<NSArray<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
-		// @required -(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable)fetchHistoryMessagesFromServer:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType startMessageId:(NSString * _Nullable)aStartMessageId fetchDirection:(AgoraChatMessageFetchHistoryDirection)direction pageSize:(int)aPageSize error:(AgoraChatError ** _Nullable)pError __attribute__((deprecated("Use -fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion: instead")));
-		[Abstract]
-		[Export ("fetchHistoryMessagesFromServer:conversationType:startMessageId:fetchDirection:pageSize:error:")]
-		[return: NullAllowed]
-		AgoraChatCursorResult<AgoraChatMessage> FetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, AgoraChatMessageFetchHistoryDirection direction, int aPageSize, out AgoraChatError pError);
-
+		
+		////@required -(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable)fetchHistoryMessagesFromServer:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType startMessageId:(NSString * _Nullable)aStartMessageId fetchDirection:(AgoraChatMessageFetchHistoryDirection)direction pageSize:(int)aPageSize error:(AgoraChatError ** _Nullable)pError __attribute__((deprecated("Use -fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion: instead")));
+		// [Abstract]
+		// [Export ("fetchHistoryMessagesFromServer:conversationType:startMessageId:fetchDirection:pageSize:error:")]
+		// [return: NullAllowed]
+		// AgoraChatCursorResult<AgoraChatMessage> FetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, AgoraChatMessageFetchHistoryDirection direction, int aPageSize, out AgoraChatError pError);
+		//
+		
 		// @required -(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable)fetchHistoryMessagesFromServer:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType startMessageId:(NSString * _Nullable)aStartMessageId pageSize:(int)aPageSize error:(AgoraChatError ** _Nullable)pError __attribute__((deprecated("Use -fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion: instead")));
-		[Abstract]
-		[Export ("fetchHistoryMessagesFromServer:conversationType:startMessageId:pageSize:error:")]
-		[return: NullAllowed]
-		AgoraChatCursorResult<AgoraChatMessage> FetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, int aPageSize, out AgoraChatError pError);
-
+		//[Abstract]
+		//[Export ("fetchHistoryMessagesFromServer:conversationType:startMessageId:pageSize:error:")]
+	//	[return: NullAllowed]
+		//AgoraChatCursorResult<AgoraChatMessage> FetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, int aPageSize, out AgoraChatError pError);
+		
 		// @required -(void)asyncFetchHistoryMessagesFromServer:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType startMessageId:(NSString * _Nullable)aStartMessageId pageSize:(int)aPageSize completion:(void (^ _Nullable)(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock __attribute__((deprecated("Use -fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion: instead")));
 		[Abstract]
 		[Export ("asyncFetchHistoryMessagesFromServer:conversationType:startMessageId:pageSize:completion:")]
 		void AsyncFetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, int aPageSize, [NullAllowed] Action<AgoraChatCursorResult<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
-		// @required -(void)asyncFetchHistoryMessagesFromServer:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType startMessageId:(NSString * _Nullable)aStartMessageId fetchDirection:(AgoraChatMessageFetchHistoryDirection)direction pageSize:(int)aPageSize completion:(void (^ _Nullable)(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock __attribute__((deprecated("Use -fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion: instead")));
+		
+		//10 // @required -(void)asyncFetchHistoryMessagesFromServer:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType startMessageId:(NSString * _Nullable)aStartMessageId fetchDirection:(AgoraChatMessageFetchHistoryDirection)direction pageSize:(int)aPageSize completion:(void (^ _Nullable)(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock __attribute__((deprecated("Use -fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion: instead")));
 		[Abstract]
 		[Export ("asyncFetchHistoryMessagesFromServer:conversationType:startMessageId:fetchDirection:pageSize:completion:")]
 		void AsyncFetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, AgoraChatMessageFetchHistoryDirection direction, int aPageSize, [NullAllowed] Action<AgoraChatCursorResult<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)asyncFetchGroupMessageAcksFromServer:(NSString * _Nonnull)aMessageId groupId:(NSString * _Nonnull)aGroupId startGroupAckId:(NSString * _Nonnull)aGroupAckId pageSize:(int)aPageSize completion:(void (^ _Nullable)(AgoraChatCursorResult<AgoraChatGroupMessageAck *> * _Nullable, AgoraChatError * _Nullable, int))aCompletionBlock;
 		//[Abstract]
 		//[Export ("asyncFetchGroupMessageAcksFromServer:groupId:startGroupAckId:pageSize:completion:")]
 		//void AsyncFetchGroupMessageAcksFromServer (string aMessageId, string aGroupId, string aGroupAckId, int aPageSize, [NullAllowed] Action<AgoraChatCursorResult<AgoraChatGroupMessageAck>, AgoraChatError, int> aCompletionBlock);
-
+		
 		// @required -(void)reportMessageWithId:(NSString * _Nonnull)aMessageId tag:(NSString * _Nonnull)aTag reason:(NSString * _Nonnull)aReason completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletion;
 		[Abstract]
 		[Export ("reportMessageWithId:tag:reason:completion:")]
 		void ReportMessageWithId (string aMessageId, string aTag, string aReason, [NullAllowed] Action<AgoraChatError> aCompletion);
-
+		
 		// @required -(void)deleteMessagesBefore:(NSUInteger)aTimestamp completion:(void (^)(AgoraChatError *))aCompletion;
 		[Abstract]
 		[Export ("deleteMessagesBefore:completion:")]
 		void DeleteMessagesBefore (nuint aTimestamp, Action<AgoraChatError> aCompletion);
-
+		
 		// @required -(void)removeMessagesFromServerWithConversation:(AgoraChatConversation * _Nonnull)conversation messageIds:(NSArray<__kindof NSString *> * _Nonnull)messageIds completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("removeMessagesFromServerWithConversation:messageIds:completion:")]
 		void RemoveMessagesFromServerWithConversation (AgoraChatConversation conversation, string[] messageIds, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)removeMessagesFromServerWithConversation:(AgoraChatConversation * _Nonnull)conversation timeStamp:(NSTimeInterval)beforeTimeStamp completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("removeMessagesFromServerWithConversation:timeStamp:completion:")]
 		void RemoveMessagesFromServerWithConversation (AgoraChatConversation conversation, double beforeTimeStamp, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)translateMessage:(AgoraChatMessage * _Nonnull)aMessage targetLanguages:(NSArray<NSString *> * _Nonnull)aLanguages completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("translateMessage:targetLanguages:completion:")]
 		void TranslateMessage (AgoraChatMessage aMessage, string[] aLanguages, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)fetchSupportedLanguages:(void (^ _Nullable)(NSArray<AgoraChatTranslateLanguage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		//[Abstract]
 		//[Export ("fetchSupportedLanguages:")]
 		//void FetchSupportedLanguages ([NullAllowed] Action<NSArray<AgoraChatTranslateLanguage>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(NSArray<AgoraChatMessage *> * _Nullable)loadMessagesWithType:(AgoraChatMessageBodyType)aType timestamp:(long long)aTimestamp count:(int)aCount fromUser:(NSString * _Nullable)aUsername searchDirection:(AgoraChatMessageSearchDirection)aDirection;
 		[Abstract]
 		[Export ("loadMessagesWithType:timestamp:count:fromUser:searchDirection:")]
 		[return: NullAllowed]
 		AgoraChatMessage[] LoadMessagesWithType (AgoraChatMessageBodyType aType, long aTimestamp, int aCount, [NullAllowed] string aUsername, AgoraChatMessageSearchDirection aDirection);
-
+		
 		// @required -(void)loadMessagesWithType:(AgoraChatMessageBodyType)aType timestamp:(long long)aTimestamp count:(int)aCount fromUser:(NSString *)aUsername searchDirection:(AgoraChatMessageSearchDirection)aDirection completion:(void (^)(NSArray<AgoraChatMessage *> *, AgoraChatError *))aCompletionBlock;
 		[Abstract]
 		[Export ("loadMessagesWithType:timestamp:count:fromUser:searchDirection:completion:")]
 		void LoadMessagesWithType (AgoraChatMessageBodyType aType, long aTimestamp, int aCount, string aUsername, AgoraChatMessageSearchDirection aDirection, Action<NSArray<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)searchMessagesWithTypes:(NSArray<NSNumber *> * _Nonnull)aTypes timestamp:(long long)aTimestamp count:(int)aCount fromUser:(NSString * _Nullable)aUsername searchDirection:(AgoraChatMessageSearchDirection)aDirection completion:(void (^ _Nonnull)(NSArray<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("searchMessagesWithTypes:timestamp:count:fromUser:searchDirection:completion:")]
 		void SearchMessagesWithTypes (NSNumber[] aTypes, long aTimestamp, int aCount, [NullAllowed] string aUsername, AgoraChatMessageSearchDirection aDirection, Action<NSArray<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(NSArray<AgoraChatMessage *> *)loadMessagesWithKeyword:(NSString *)aKeywords timestamp:(long long)aTimestamp count:(int)aCount fromUser:(NSString *)aSender searchDirection:(AgoraChatMessageSearchDirection)aDirection;
 		[Abstract]
 		[Export ("loadMessagesWithKeyword:timestamp:count:fromUser:searchDirection:")]
 		AgoraChatMessage[] LoadMessagesWithKeyword (string aKeywords, long aTimestamp, int aCount, string aSender, AgoraChatMessageSearchDirection aDirection);
-
+		
 		// @required -(void)loadMessagesWithKeyword:(NSString *)aKeywords timestamp:(long long)aTimestamp count:(int)aCount fromUser:(NSString *)aSender searchDirection:(AgoraChatMessageSearchDirection)aDirection completion:(void (^)(NSArray<AgoraChatMessage *> *, AgoraChatError *))aCompletionBlock;
 		[Abstract]
 		[Export ("loadMessagesWithKeyword:timestamp:count:fromUser:searchDirection:completion:")]
 		void LoadMessagesWithKeyword (string aKeywords, long aTimestamp, int aCount, string aSender, AgoraChatMessageSearchDirection aDirection, Action<NSArray<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)loadMessagesWithKeyword:(NSString *)aKeywords timestamp:(long long)aTimestamp count:(int)aCount fromUser:(NSString *)aSender searchDirection:(AgoraChatMessageSearchDirection)aDirection scope:(AgoraChatMessageSearchScope)aScope completion:(void (^)(NSArray<AgoraChatMessage *> *, AgoraChatError *))aCompletionBlock;
 		[Abstract]
 		[Export ("loadMessagesWithKeyword:timestamp:count:fromUser:searchDirection:scope:completion:")]
 		void LoadMessagesWithKeyword (string aKeywords, long aTimestamp, int aCount, string aSender, AgoraChatMessageSearchDirection aDirection, AgoraChatMessageSearchScope aScope, Action<NSArray<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)addReaction:(NSString * _Nonnull)reaction toMessage:(NSString * _Nonnull)messageId completion:(void (^ _Nullable)(AgoraChatError * _Nullable))completion;
 		[Abstract]
 		[Export ("addReaction:toMessage:completion:")]
 		void AddReaction (string reaction, string messageId, [NullAllowed] Action<AgoraChatError> completion);
-
+		
 		// @required -(void)removeReaction:(NSString * _Nonnull)reaction fromMessage:(NSString * _Nonnull)messageId completion:(void (^ _Nullable)(AgoraChatError * _Nullable))completion;
 		[Abstract]
 		[Export ("removeReaction:fromMessage:completion:")]
 		void RemoveReaction (string reaction, string messageId, [NullAllowed] Action<AgoraChatError> completion);
-
+		
 		// @required -(void)getReactionList:(NSArray<NSString *> * _Nonnull)messageIds groupId:(NSString * _Nullable)groupId chatType:(AgoraChatType)chatType completion:(void (^ _Nonnull)(NSDictionary<NSString *,NSArray<AgoraChatMessageReaction *> *> * _Nonnull, AgoraChatError * _Nullable))completion;
 		[Abstract]
 		[Export ("getReactionList:groupId:chatType:completion:")]
 		void GetReactionList (string[] messageIds, [NullAllowed] string groupId, AgoraChatType chatType, Action<NSDictionary<NSString, NSArray<AgoraChatMessageReaction>>, AgoraChatError> completion);
-
+		
 		// @required -(void)getReactionDetail:(NSString * _Nonnull)messageId reaction:(NSString * _Nonnull)reaction cursor:(NSString * _Nullable)cursor pageSize:(uint64_t)pageSize completion:(void (^ _Nonnull)(AgoraChatMessageReaction * _Nonnull, NSString * _Nullable, AgoraChatError * _Nullable))completion;
 		[Abstract]
 		[Export ("getReactionDetail:reaction:cursor:pageSize:completion:")]
 		void GetReactionDetail (string messageId, string reaction, [NullAllowed] string cursor, ulong pageSize, Action<AgoraChatMessageReaction, NSString, AgoraChatError> completion);
-
+		
 		// @required -(void)fetchMessagesFromServerBy:(NSString * _Nonnull)conversationId conversationType:(AgoraChatConversationType)type cursor:(NSString * _Nullable)cursor pageSize:(NSUInteger)pageSize option:(AgoraChatFetchServerMessagesOption * _Nullable)option completion:(void (^ _Nullable)(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		//[Abstract]
 		//[Export ("fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion:")]
 		//void FetchMessagesFromServerBy (string conversationId, AgoraChatConversationType type, [NullAllowed] string cursor, nuint pageSize, [NullAllowed] AgoraChatFetchServerMessagesOption option, [NullAllowed] Action<AgoraChatCursorResult<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)addConversationMark:(NSArray<NSString *> * _Nonnull)conversationIds mark:(AgoraChatMarkType)mark completion:(void (^ _Nullable)(AgoraChatError * _Nullable))completion;
 		[Abstract]
 		[Export ("addConversationMark:mark:completion:")]
 		void AddConversationMark (string[] conversationIds, AgoraChatMarkType mark, [NullAllowed] Action<AgoraChatError> completion);
-
+		
 		// @required -(void)removeConversationMark:(NSArray<NSString *> * _Nonnull)conversationIds mark:(AgoraChatMarkType)mark completion:(void (^ _Nullable)(AgoraChatError * _Nullable))completion;
 		[Abstract]
 		[Export ("removeConversationMark:mark:completion:")]
 		void RemoveConversationMark (string[] conversationIds, AgoraChatMarkType mark, [NullAllowed] Action<AgoraChatError> completion);
-
+		
 		// @required -(void)getConversationsFromServerWithCursor:(NSString * _Nullable)cursor filter:(AgoraChatConversationFilter * _Nonnull)filter completion:(void (^ _Nonnull)(AgoraChatCursorResult<AgoraChatConversation *> * _Nullable, AgoraChatError * _Nullable))completionBlock;
 		//[Abstract]
 		//[Export ("getConversationsFromServerWithCursor:filter:completion:")]
 		//void GetConversationsFromServerWithCursor ([NullAllowed] string cursor, AgoraChatConversationFilter filter, Action<AgoraChatCursorResult<AgoraChatConversation>, AgoraChatError> completionBlock);
-
+		
 		// @required -(void)deleteAllMessagesAndConversations:(BOOL)clearServerData completion:(void (^ _Nullable)(AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("deleteAllMessagesAndConversations:completion:")]
 		void DeleteAllMessagesAndConversations (bool clearServerData, [NullAllowed] Action<AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)pinMessage:(NSString * _Nonnull)messageId completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("pinMessage:completion:")]
 		void PinMessage (string messageId, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)unpinMessage:(NSString * _Nonnull)messageId completion:(void (^ _Nullable)(AgoraChatMessage * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("unpinMessage:completion:")]
 		void UnpinMessage (string messageId, [NullAllowed] Action<AgoraChatMessage, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(void)getPinnedMessagesFromServer:(NSString * _Nonnull)conversationId completion:(void (^ _Nullable)(NSArray<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock;
 		[Abstract]
 		[Export ("getPinnedMessagesFromServer:completion:")]
 		void GetPinnedMessagesFromServer (string conversationId, [NullAllowed] Action<NSArray<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
-
+		
 		// @required -(AgoraChatError * _Nonnull)markAllConversationsAsRead;
 		[Abstract]
 		[Export ("markAllConversationsAsRead")]
 		//[Verify (MethodToProperty)]
 		AgoraChatError MarkAllConversationsAsRead { get; }
-
+		
 		// @required -(void)getMessageCountWithCompletion:(void (^ _Nonnull)(NSInteger, AgoraChatError * _Nullable))completion;
 		[Abstract]
 		[Export ("getMessageCountWithCompletion:")]
-		void GetMessageCountWithCompletion (Action<nint, AgoraChatError> completion);
+		void GetMessageCountWithCompletion (Action<int, AgoraChatError> completion);
 	}
 	// @interface AgoraChatConversation : NSObject
 	[BaseType (typeof(NSObject), Name = "AgoraChatConversation")]
@@ -1398,23 +1413,51 @@ namespace HotCoffee.AgoraChat.iOS
 		nint GetMessageCountStart (nint aStartTimestamp, nint aEndTimestamp);
 	}
 	
-	[Protocol]
 	// audit-objc-generics: @interface AgoraChatCursorResult<__covariant ObjectType> : NSObject
-	[BaseType (typeof(NSObject), Name = "AgoraChatCursorResult")]
-	//[Register ("AgoraChatCursorResult", SkipRegistration = true)]
-	interface AgoraChatCursorResult<TKey>
+	[BaseType (typeof(NSObject))]
+	interface AgoraChatCursorResult<T>
 	{
 		// @property (nonatomic, strong) NSArray<ObjectType> * _Nullable list;
 		[NullAllowed, Export ("list", ArgumentSemantic.Strong)]
-		NSArray<ObjectType> List { get; set; }
-
+		NSObject[] List { get; set; }
+	
 		// @property (copy, nonatomic) NSString * _Nullable cursor;
 		[NullAllowed, Export ("cursor")]
 		string Cursor { get; set; }
-
+	
 		// +(instancetype _Nonnull)cursorResultWithList:(NSArray<ObjectType> * _Nullable)aList andCursor:(NSString * _Nullable)aCusror;
 		[Static]
-		[Export("cursorResultWithList:andCursor:")]
-		AgoraChatCursorResult<TKey> CursorResultWithList([NullAllowed] NSArray<ObjectType> aList, [NullAllowed] string aCusror);
+		[Export ("cursorResultWithList:andCursor:")]
+		AgoraChatCursorResult<T> CursorResultWithList ([NullAllowed] NSObject[] aList, [NullAllowed] string aCusror);
+	}
+	// @interface AgoraChatTextMessageBody : AgoraChatMessageBody
+	[BaseType (typeof(AgoraChatMessageBody))]
+	[DisableDefaultCtor]
+	interface AgoraChatTextMessageBody
+	{
+		// @property (readonly, copy, nonatomic) NSString * _Nonnull text;
+		[Export ("text")]
+		string Text { get; }
+
+		// @property (copy, nonatomic) NSArray<NSString *> * _Nullable targetLanguages;
+		[NullAllowed, Export ("targetLanguages", ArgumentSemantic.Copy)]
+		string[] TargetLanguages { get; set; }
+
+		// @property (readonly, copy, nonatomic) NSDictionary<NSString *,NSString *> * _Nullable translations;
+		[NullAllowed, Export ("translations", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, NSString> Translations { get; }
+
+		// -(instancetype _Nonnull)initWithText:(NSString * _Nullable)aText;
+		[Export ("initWithText:")]
+		NativeHandle Constructor ([NullAllowed] string aText);
+	}
+	// @protocol AgoraChatLogDelegate <NSObject>
+	[Protocol, Model]
+	[BaseType (typeof(NSObject), Name = "AgoraChatLogDelegate")]
+	interface AgoraChatLogDelegate
+	{
+		// @optional -(void)logDidOutput:(NSString * _Nonnull)log;
+		[Export ("logDidOutput:")]
+		void LogDidOutput (string log);
 	}
 }
