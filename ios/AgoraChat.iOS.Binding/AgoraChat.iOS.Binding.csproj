@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!--
       <NoBindingEmbedding>false</NoBindingEmbedding>
       Enable trim analyzers for class libraries.
@@ -42,7 +43,7 @@
   <ItemGroup>
     <NativeReference Include="../native/AgoraChat.xcframework">
       <Kind>Framework</Kind>
-      <SmartLink>false</SmartLink>
+      <SmartLink>true</SmartLink>
       <ForceLoad>true</ForceLoad>
     </NativeReference>
   </ItemGroup>

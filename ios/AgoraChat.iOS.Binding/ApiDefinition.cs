@@ -1,4 +1,5 @@
 using System;
+using UIKit;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
@@ -9,6 +10,7 @@ using Foundation;
 using Microsoft.VisualBasic.CompilerServices;
 using ObjCRuntime;
 using UserNotifications;
+using System.Collections.Generic;
 
 namespace HotCoffee.AgoraChat.iOS
 {   
@@ -235,8 +237,8 @@ namespace HotCoffee.AgoraChat.iOS
 		string ErrorDescription { get; set; }
 
 		// -(instancetype)initWithDescription:(NSString *)aDescription code:(AgoraChatErrorCode)aCode;
-		//[Export ("initWithDescription:code:")]
-		//NativeHandle Constructor (string aDescription, AgoraChatErrorCode aCode);
+		 [Export ("initWithDescription:code:")]
+		 NativeHandle Constructor (string aDescription, AgoraChatErrorCode aCode);
 
 		// +(instancetype _Nonnull)errorWithDescription:(NSString * _Nullable)aDescription code:(AgoraChatErrorCode)aCode;
 		[Static]
@@ -247,7 +249,7 @@ namespace HotCoffee.AgoraChat.iOS
 	// @interface AgoraChatClient : NSObject
 	[BaseType (typeof(NSObject), Name = "AgoraChatClient")]
 	//[DisableDefaultCtor]
-	interface AgoraChatClient
+	interface AgoraChatClient : INativeObject
 	{
 		// @property (readonly, nonatomic, strong) NSString * _Nonnull version;
 		[Export ("version", ArgumentSemantic.Strong)]
@@ -610,7 +612,7 @@ namespace HotCoffee.AgoraChat.iOS
 	
 	// @protocol AgoraChatManagerDelegate <NSObject>
 	//[Protocol, Model]
-	[Protocol][Model]
+	[Model][Protocol]
 	[BaseType (typeof(NSObject), Name = "AgoraChatManagerDelegate")]
 	interface AgoraChatManagerDelegate
 	{
@@ -833,9 +835,13 @@ namespace HotCoffee.AgoraChat.iOS
 		[NullAllowed, Export ("userList")]
 		string[] UserList { get; }
 	}
+	
+//	[Model]
+
+   // [Protocol][Model]
 	// @interface AgoraChatMessageBody : NSObject
 	[BaseType (typeof(NSObject), Name = "AgoraChatMessageBody")]
-	interface AgoraChatMessageBody
+	interface AgoraChatMessageBody : INativeObject
 	{
 		// @property (readonly, nonatomic) AgoraChatMessageBodyType type;
 		[Export ("type")]
@@ -1107,12 +1113,12 @@ namespace HotCoffee.AgoraChat.iOS
 		//AgoraChatCursorResult<AgoraChatMessage> FetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, int aPageSize, out AgoraChatError pError);
 		
 		// @required -(void)asyncFetchHistoryMessagesFromServer:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType startMessageId:(NSString * _Nullable)aStartMessageId pageSize:(int)aPageSize completion:(void (^ _Nullable)(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock __attribute__((deprecated("Use -fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion: instead")));
-		[Abstract]
+		//[Abstract]
 		[Export ("asyncFetchHistoryMessagesFromServer:conversationType:startMessageId:pageSize:completion:")]
 		void AsyncFetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, int aPageSize, [NullAllowed] Action<AgoraChatCursorResult<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
 		
 		//10 // @required -(void)asyncFetchHistoryMessagesFromServer:(NSString * _Nonnull)aConversationId conversationType:(AgoraChatConversationType)aConversationType startMessageId:(NSString * _Nullable)aStartMessageId fetchDirection:(AgoraChatMessageFetchHistoryDirection)direction pageSize:(int)aPageSize completion:(void (^ _Nullable)(AgoraChatCursorResult<AgoraChatMessage *> * _Nullable, AgoraChatError * _Nullable))aCompletionBlock __attribute__((deprecated("Use -fetchMessagesFromServerBy:conversationType:cursor:pageSize:option:completion: instead")));
-		[Abstract]
+		//[Abstract]
 		[Export ("asyncFetchHistoryMessagesFromServer:conversationType:startMessageId:fetchDirection:pageSize:completion:")]
 		void AsyncFetchHistoryMessagesFromServer (string aConversationId, AgoraChatConversationType aConversationType, [NullAllowed] string aStartMessageId, AgoraChatMessageFetchHistoryDirection direction, int aPageSize, [NullAllowed] Action<AgoraChatCursorResult<AgoraChatMessage>, AgoraChatError> aCompletionBlock);
 		
@@ -1413,13 +1419,14 @@ namespace HotCoffee.AgoraChat.iOS
 		nint GetMessageCountStart (nint aStartTimestamp, nint aEndTimestamp);
 	}
 	
+	//[Protocol]
 	// audit-objc-generics: @interface AgoraChatCursorResult<__covariant ObjectType> : NSObject
 	[BaseType (typeof(NSObject))]
 	interface AgoraChatCursorResult<T>
 	{
 		// @property (nonatomic, strong) NSArray<ObjectType> * _Nullable list;
 		[NullAllowed, Export ("list", ArgumentSemantic.Strong)]
-		NSObject[] List { get; set; }
+		T[] List { get; set; }
 	
 		// @property (copy, nonatomic) NSString * _Nullable cursor;
 		[NullAllowed, Export ("cursor")]
@@ -1428,7 +1435,7 @@ namespace HotCoffee.AgoraChat.iOS
 		// +(instancetype _Nonnull)cursorResultWithList:(NSArray<ObjectType> * _Nullable)aList andCursor:(NSString * _Nullable)aCusror;
 		[Static]
 		[Export ("cursorResultWithList:andCursor:")]
-		AgoraChatCursorResult<T> CursorResultWithList ([NullAllowed] NSObject[] aList, [NullAllowed] string aCusror);
+		AgoraChatCursorResult<T> CursorResultWithList ([NullAllowed] T[] aList, [NullAllowed] string aCusror);
 	}
 	// @interface AgoraChatTextMessageBody : AgoraChatMessageBody
 	[BaseType (typeof(AgoraChatMessageBody))]
@@ -1459,5 +1466,86 @@ namespace HotCoffee.AgoraChat.iOS
 		// @optional -(void)logDidOutput:(NSString * _Nonnull)log;
 		[Export ("logDidOutput:")]
 		void LogDidOutput (string log);
+	}
+	// @interface AgoraChatFileMessageBody : AgoraChatMessageBody
+	[BaseType (typeof(AgoraChatMessageBody))]
+	interface AgoraChatFileMessageBody
+	{
+		// @property (copy, nonatomic) NSString * displayName;
+		[Export ("displayName")]
+		string DisplayName { get; set; }
+
+		// @property (copy, nonatomic) NSString * localPath;
+		[Export ("localPath")]
+		string LocalPath { get; set; }
+
+		// @property (copy, nonatomic) NSString * remotePath;
+		[Export ("remotePath")]
+		string RemotePath { get; set; }
+
+		// @property (copy, nonatomic) NSString * secretKey;
+		[Export ("secretKey")]
+		string SecretKey { get; set; }
+
+		// @property (nonatomic) long long fileLength;
+		[Export ("fileLength")]
+		long FileLength { get; set; }
+
+		// @property (nonatomic) AgoraChatDownloadStatus downloadStatus;
+		[Export ("downloadStatus", ArgumentSemantic.Assign)]
+		AgoraChatDownloadStatus DownloadStatus { get; set; }
+
+		// -(instancetype _Nonnull)initWithLocalPath:(NSString * _Nullable)aLocalPath displayName:(NSString * _Nullable)aDisplayName;
+		[Export ("initWithLocalPath:displayName:")]
+		NativeHandle Constructor ([NullAllowed] string aLocalPath, [NullAllowed] string aDisplayName);
+
+		// -(instancetype _Nonnull)initWithData:(NSData * _Nullable)aData displayName:(NSString * _Nullable)aDisplayName;
+		[Export ("initWithData:displayName:")]
+		NativeHandle Constructor ([NullAllowed] NSData aData, [NullAllowed] string aDisplayName);
+	}
+
+	// @interface AgoraChatImageMessageBody : AgoraChatFileMessageBody
+	[BaseType (typeof(AgoraChatFileMessageBody))]
+	interface AgoraChatImageMessageBody
+	{
+		// @property (nonatomic) CGSize size;
+		[Export ("size", ArgumentSemantic.Assign)]
+		CGSize Size { get; set; }
+
+		// @property (nonatomic) CGFloat compressionRatio;
+		[Export ("compressionRatio")]
+		nfloat CompressionRatio { get; set; }
+
+		// @property (copy, nonatomic) NSString * thumbnailDisplayName;
+		[Export ("thumbnailDisplayName")]
+		string ThumbnailDisplayName { get; set; }
+
+		// @property (copy, nonatomic) NSString * thumbnailLocalPath;
+		[Export ("thumbnailLocalPath")]
+		string ThumbnailLocalPath { get; set; }
+
+		// @property (copy, nonatomic) NSString * thumbnailRemotePath;
+		[Export ("thumbnailRemotePath")]
+		string ThumbnailRemotePath { get; set; }
+
+		// @property (copy, nonatomic) NSString * thumbnailSecretKey;
+		[Export ("thumbnailSecretKey")]
+		string ThumbnailSecretKey { get; set; }
+
+		// @property (nonatomic) CGSize thumbnailSize;
+		[Export ("thumbnailSize", ArgumentSemantic.Assign)]
+		CGSize ThumbnailSize { get; set; }
+
+		// @property (nonatomic) long long thumbnailFileLength;
+		[Export ("thumbnailFileLength")]
+		long ThumbnailFileLength { get; set; }
+
+		// @property (nonatomic) AgoraChatDownloadStatus thumbnailDownloadStatus;
+		[Export ("thumbnailDownloadStatus", ArgumentSemantic.Assign)]
+		AgoraChatDownloadStatus ThumbnailDownloadStatus { get; set; }
+
+		// -(instancetype)initWithData:(NSData *)aData thumbnailData:(NSData *)aThumbnailData;
+		[Export ("initWithData:thumbnailData:")]
+		NativeHandle Constructor (NSData aData, NSData aThumbnailData);
 	}
 }

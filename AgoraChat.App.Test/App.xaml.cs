@@ -1,4 +1,5 @@
 
+using Microsoft.Extensions.Configuration;
 using ObjCRuntime;
 #if IOS
 using HotCoffee.AgoraChat.iOS;
@@ -8,60 +9,126 @@ namespace AgoraChat.App.Test
     public partial class App : Application
     {  
         private bool isJoined = false;
+        private bool isInitialized = false;
         private AgoraChatClient client;
         private IAgoraChatManager chatManager;
-        public App()
+        private IConfiguration configuration;
+        public App(IConfiguration configuration)
         {
             InitializeComponent();
+            this.configuration = configuration;
 
 #if ANDROID
-               
 #endif
 #if IOS
-            var options = AgoraChatOptions.OptionsWithAppkey("411294965#1491692");
-            options.EnableConsoleLog = true;
-            options.LogLevel = AgoraChatLogLevel.Debug;
-            options.ApnsCertName = "a27e00c5235a40f5971d367530e4e2a7";
-            options.UsingHttpsOnly = false;
-           client = AgoraChatClient.SharedClient();
-            
-          //  options.Add
-          client.InitializeSDKWithOptions(options);
-            
-           // Console.WriteLine(error.ErrorDescription);
-          var accessUserToken = client.AccessUserToken;
-          Console.WriteLine(accessUserToken);
-            
-            client.AddDelegate(new MyChatClientDelegate(), null);
-           client.AddLogDelegate(new MyChatLogOutDelegate(), null); 
-          chatManager = (IAgoraChatManager)client.ChatManager.Self;
-    
-       
-         chatManager.AddDelegate(new MyAgoraChatManagerDelegate(), null);
-             
-           
-
-            //Task.Delay(5000);
-           Console.WriteLine("Agora IOS Connected "+ client.IsConnected +" Current User Name " + client.CurrentUsername);
-          //  Console.WriteLine(" User Access Tokens  "+  accessUserToken);
-           
-           JoinLeave("36" , "007eJxTYHj54fHzjpjI9dcPTpRdwn/txd/ZVvveerNt3b9Jb+2B/XxsCgxphuamBmkmpkmpZkkmhubJSSZmiUlJiamW5qamZsZpZhpz5DIaAhkZzMRTGRgZWIGYkQHEV2FINDZLNDQ0MNA1NDNM0zU0TDPQtTSzNNNNS0q0TDIwT7NIMjYCAJlzKLA=");
+            setupAgoraChatClient();
 #endif
+
+
         }
+#if IOS
+        public bool setupAgoraChatClient()
+        {
+            try
+            {
+                var options = AgoraChatOptions.OptionsWithAppkey((string)configuration["appkey"]!);
+                options.EnableConsoleLog = true;
+                options.IsAutoLogin = true;
+                options.LogLevel = AgoraChatLogLevel.Error;
+                client = AgoraChatClient.SharedClient();
+                Console.WriteLine("User Logged In -> " + client.IsLoggedIn);
+                //  options.Add
+                
+                AgoraChatError? anyError = client.InitializeSDKWithOptions(options);
+                
+                setChatDelegates();
+                if (anyError != null)
+                {
+                    if (anyError.Code == AgoraChatErrorCode.NoError)
+                    {
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Sorry Sdk not implemented");
+                        
+                    }
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+                
+            }
+            return true;
+        }
+
+        public void setChatDelegates()
+        {   
+            client.AddDelegate(new MyChatClientDelegate(), null);
+            client.AddLogDelegate(new MyChatLogOutDelegate(), null); 
+        }
+#endif
         protected override Window CreateWindow(IActivationState? activationState)
         {
             return new Window(new ChatPage());
         }
 
+        protected override void OnStart()
+        {   
+            base.OnStart();
+            if (true)
+            {   
+                Console.WriteLine("----------- AgoraChat Initialized -----------");
+                JoinLeave((string)configuration["username"]!, (string)configuration["token"]!);
+            }
+        }
+
+        public void GetChatHistory()
+        {
+            client.ChatManager?.AsyncFetchHistoryMessagesFromServer("6",
+                AgoraChatConversationType.Chat, null, 100, ((result, error) =>
+                {   
+                  //  Console.WriteLine(" History Messages Counts " + result);
+                  
+                    var  res = result as AgoraChatCursorResult<AgoraChatMessage>;
+                    Console.WriteLine(" History Messages Counts " + res.List.Count());
+                    foreach (var msg in res.List)
+                    {
+                    //    var chatMsg = (AgoraChatMessage)msg;
+                     //   AgoraChatMessageBody body = chatMsg.Body;
+                      //  Console.WriteLine(((AgoraChatTextMessageBody)body).Text);
+                       
+                        
+                        AgoraChatMessageBody body = (AgoraChatMessageBody)msg.Body;
+                        if (body != null && body.Type == AgoraChatMessageBodyType.Text)
+                        {
+                            Console.WriteLine(" Message: " + ((AgoraChatTextMessageBody)body).Text);
+                        }
+                        else if (body != null && body.Type == AgoraChatMessageBodyType.File)
+                        {
+                            Console.WriteLine(" File Name : " + ((AgoraChatFileMessageBody)body).DisplayName);
+                        }
+                        else if (body != null && body.Type == AgoraChatMessageBodyType.Image)
+                        {
+                            Console.WriteLine(" Image Name : " + ((AgoraChatImageMessageBody)body).DisplayName);
+                            Console.WriteLine(" Image Thumbnail Name : " + ((AgoraChatImageMessageBody)body).ThumbnailDisplayName);
+                        }
+                        else
+                        {
+                            Console.WriteLine(" Not Supported ");
+                        }
+                    }
+                }));
+           // client.ChatManager.AsyncFetchHistoryMessagesFromServer(client.CurrentUsername, AgoraChatConversationType.Chat , null,);
+        }
         public void JoinLeave(string username , string token)
         {
             if (client != null)
             {   
                 //var result = client.LoginWithUsername("", "");
-                client.ServiceCheckWithUsername("36","Chetu@123",(stype,serror)=>
-                {
-                    Console.WriteLine("Error" + serror);
-                });
                 var result = client.LoginWithUsernameAndToken(username, token);
                 if (result != null)
                 {
@@ -70,7 +137,11 @@ namespace AgoraChat.App.Test
                         Console.WriteLine("You are already joined to " + client.CurrentUsername);
                        
                     }
-                   SendMeesages("Hello Agora! From iOS");
+                    AgoraChatManagerDelegate chatManagerDelegate = new MyAgoraChatManagerDelegate();
+                    client.ChatManager?.AddDelegate(chatManagerDelegate, null);
+                    
+                    GetChatHistory();
+                    SendMeesages("Hello Agora! From iOS");
                 }
             }
         }
@@ -79,14 +150,25 @@ namespace AgoraChat.App.Test
             try
             {   
                 Console.WriteLine(" Current Name --> " + client.CurrentUsername);
+                
                 AgoraChatMessage message = new AgoraChatMessage("6",new AgoraChatTextMessageBody(mesages) ,null);
                 message.From = client.CurrentUsername;
              //   message.ConversationId = "36";
-                message.To = "6";
+                message.To = (string)configuration["toname"]!;
                 message.ChatType = AgoraChatType.Chat;
+                message.DeliverOnlineOnly = false;
+                message.Direction = AgoraChatMessageDirection.Send;
              //   message.Body = new AgoraChatTextMessageBody(mesages);
                 message.Ext = null;
-                client.ChatManager?.SendMessage(message, null, null);
+                
+                client.ChatManager?.SendMessage(message ,null , null);
+                // client.ChatManager?.SendMessage(message , (message1) =>
+                // {
+                //     
+                // }, ((chatMessage, error) =>
+                // {
+                //     Console.WriteLine("Error" + error.ToString());
+                // } ));
             }
             catch (Exception e)
             {

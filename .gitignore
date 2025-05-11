@@ -363,3 +363,9 @@ MigrationBackup/
 FodyWeavers.xsd
 /android/native/.idea
 *.so
+
+# Express - auto-generated txt
+*.txt
+
+# Express appconfig for special keys
+appconfig.json

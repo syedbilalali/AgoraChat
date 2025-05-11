@@ -1,6 +1,8 @@
-﻿using CommunityToolkit.Maui;
+﻿using AVFoundation;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
+using HotCoffee.Maui.Extensions;
 
 namespace AgoraChat.App.Test
 {
@@ -11,6 +13,7 @@ namespace AgoraChat.App.Test
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .ConfigureAppConfiguration(typeof(MauiProgram) , "appconfig.json")
                 .UseMauiCommunityToolkit()
                 .ConfigureSyncfusionToolkit()
                 .ConfigureMauiHandlers(handlers =>

@@ -56,7 +56,7 @@
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
 	  <CodesignKey>Apple Development: Pawan Gupta (UVXPH4SQ58)</CodesignKey>
 	  <CodesignProvision>myMA development Profile</CodesignProvision>
-	  <MtouchLink>SdkOnly</MtouchLink>
+	  <MtouchLink>None</MtouchLink>
 		
 	</PropertyGroup>
 
@@ -85,6 +85,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="HotCoffee.Maui.Extensions" Version="1.1.2-alpha" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
@@ -99,8 +100,13 @@
 
 	<ItemGroup>
 	  <Reference Include="AgoraChat.iOS.Binding">
-	    <HintPath>..\ios\AgoraChat.iOS.Binding\bin\Debug\net9.0-ios\AgoraChat.iOS.Binding.dll</HintPath>
+	    <HintPath>..\ios\AgoraChat.iOS.Binding\bin\Release\net9.0-ios\AgoraChat.iOS.Binding.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="appconfig.json" />
+	  <EmbeddedResource Include="appconfig.json" />
 	</ItemGroup>
 
 	
