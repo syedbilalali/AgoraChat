@@ -28,5 +28,22 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
+	<key>IDEDidComputeMac32BitWarning</key>
+	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Access the microphone.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Access the camera.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Need to access the internet</string>
 </dict>
 </plist>
