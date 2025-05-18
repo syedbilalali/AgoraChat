@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
-		
+		<!--<SupportedPlatformArchitecture>ARM64</SupportedPlatformArchitecture>	-->	
 		<!-- Uncomment to also the build with MacOS app.-->
 		<!--<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>-->
 		<!-- Uncomment to also the build with Windows app.-->
@@ -16,7 +16,6 @@
 		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
-
 		<OutputType>Exe</OutputType>
 		<RootNamespace>AgoraChat.App.Test</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -25,13 +24,19 @@
 		<Nullable>enable</Nullable>
 		<!-- https://github.com/CommunityToolkit/Maui/issues/2205 -->
 		<NoWarn>XC0103</NoWarn>
+		<NoBindingEmbedding>false</NoBindingEmbedding>
+		<_AggressiveAttributeTrimming>false</_AggressiveAttributeTrimming>
+		
+		
+			
+		
 		<MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 
 		<!-- Display name -->
 		<ApplicationTitle>AgoraChat.App.Test</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.agorachat.app.test</ApplicationId>
+		<ApplicationId>com.myMALLC.myMA</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -39,13 +44,26 @@
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
 		<WindowsPackageType>None</WindowsPackageType>
-
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+		
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">12.2</SupportedOSPlatformVersion>
 		<!--<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>-->
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<!--<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>-->
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+	  <CodesignKey>Apple Development: Pawan Gupta (UVXPH4SQ58)</CodesignKey>
+	  <CodesignProvision>myMA development Profile</CodesignProvision>
+	  <MtouchLink>None</MtouchLink>
+		
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+	  <CodesignKey>Apple Development: Pawan Gupta (UVXPH4SQ58)</CodesignKey>
+	  
+	  <CodesignProvision>myMA development Profile</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -67,6 +85,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="HotCoffee.Maui.Extensions" Version="1.1.2-alpha" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
@@ -79,12 +98,37 @@
 		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.2" />
 	</ItemGroup>
 
-	<!--<ItemGroup Condition="$(TargetFramework.Contains('android'))">
-	  <ProjectReference Include="..\android\AgoraChat.Android.Binding\AgoraChat.Android.Binding.csproj" />
-	</ItemGroup>-->
+	<ItemGroup>
+	  <Reference Include="AgoraChat.iOS.Binding">
+	    <HintPath>..\ios\AgoraChat.iOS.Binding\bin\Release\net9.0-ios\AgoraChat.iOS.Binding.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Agora.Chat.Maui\Agora.Chat.Maui.csproj" />
+	  <None Remove="appconfig.json" />
+	  <EmbeddedResource Include="appconfig.json" />
 	</ItemGroup>
+
+	
+
+	<!--
+	<ItemGroup Condition="$(TargetFramework.Contains('android'))">
+	  <ProjectReference Include="..\android\AgoraChat.Android.Binding\AgoraChat.Android.Binding.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="$(TargetFramework.Contains('ios'))">
+		<ProjectReference Include="..\ios\AgoraChat.iOS.Binding\AgoraChat.iOS.Binding.csproj" />
+	</ItemGroup>
+	
+    -->
+   <!--
+   
+   <ItemGroup Condition="$(TargetFramework.Contains('ios'))">
+		<ProjectReference Include="..\ios\AgoraChat.iOS.Binding\AgoraChat.iOS.Binding.csproj" />
+	</ItemGroup>
+   			<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui.NativeLibraryInterop.BuildTasks" Version="0.0.1-pre1" PrivateAssets="all" />
+	</ItemGroup>
+   -->
 	
 </Project>

@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BAFB4F7C-A95A-474F-B384-1598AC6CA62C}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agora.Chat.Maui", "Agora.Chat.Maui\Agora.Chat.Maui.csproj", "{67DACAB9-C0B7-4095-92E9-206B2EE57120}"

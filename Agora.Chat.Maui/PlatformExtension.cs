@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.LifecycleEvents;
+﻿ using Microsoft.Maui.LifecycleEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
