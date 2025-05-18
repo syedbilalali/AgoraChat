@@ -1,0 +1,42 @@
+name: Build Master Branch
+on:
+  push:
+    branches:
+    - master
+    tags:
+      - '*'
+    paths-ignore:
+      - README.md
+      - ci_pipeline.yaml
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-15]
+    timeout-minutes: 15
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    # - name: GitHub Tag Name example
+    #   run: |
+    #      echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+    #      echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+    # - name: Set VERSION variable from tag
+    #   # if: startsWith(github.ref, 'refs/tags/') && endsWith(github.ref, '-alpha')
+    #   # run: echo "VERSION=${{ github.ref }}" >> $GITHUB_ENV
+    #   run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV 
+    #   # run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    #   # run: echo "VERSION=${{ github.ref }}" >> $GITHUB_ENV
+    # - name: Check Current Version
+    #   run: echo $VERSION
+    - name: Install Latest .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.LATEST_NET_VERSION }}
+    - name: Install .NET MAUI Workload
+      run: dotnet workload install maui
+    - name: Build
+      run: dotnet build --configuration Release /p:Version=${VERSION}
+    # - name: Test
+    #   run: dotnet test --configuration Release --no-build
