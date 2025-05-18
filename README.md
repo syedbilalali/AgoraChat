@@ -1,4 +1,4 @@
-﻿# AgoraChat .NET MAUI Android
+﻿# AgoraChat .NET MAUI Android/iOS Bindings
 
 ## 📌 Overview
 This repository provides a **comprehensive guide** on integrating **Agora Chat** into a **.NET MAUI Android** application using **native interop**. The goal is to bridge .NET MAUI with Android’s native Agora Chat SDK for seamless chatting.
