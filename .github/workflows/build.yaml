@@ -7,7 +7,6 @@ on:
       - '*'
     paths-ignore:
       - README.md
-      - ci_pipeline.yaml
 jobs:
   build:
     runs-on: ${{ matrix.os }}

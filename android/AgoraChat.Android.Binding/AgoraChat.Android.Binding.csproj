@@ -15,6 +15,30 @@
       To learn more, see: https://learn.microsoft.com/dotnet/maui/migration/android-binding-projects
     -->
 	</PropertyGroup>
+	<!--- Nuget Package Configuration and Description-->
+	<PropertyGroup>
+		<PackageId>HotCoffee.Agora.Chat.Android</PackageId>
+		<PackageVersion>1.0.0-alpha</PackageVersion>
+		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<FileVersion>1.0.0</FileVersion>
+		<Version>1.0.0-alpha</Version>
+		<Title>HotCoffee Android Agora.io Chat SDK</Title>
+		<Authors>HotCoffee.Agora.Chat.Android</Authors>
+		<Owners>HotCoffee.Agora.Chat.Android</Owners>
+		<PackageProjectUrl>https://github.com/syedbilalali/AgoraChat</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<Description>.NET for Android (formerly Xamarin.Android) Binding Library - Agora.io Chat SDK</Description>
+		<PackageReleaseNotes>Agora.io Chat SDK v1.0.0-alpha</PackageReleaseNotes>
+		<Copyright>Copyright (c) Programmer Talks 2026</Copyright>
+		<PackageTags>Xamarin.Android, NET MAUI, Agora.io, Agora, MonoDroid, Voice Call, Video Call, Live Streaming</PackageTags>
+		<Summary>Agora is the leading video, voice and live interactive streaming platform, helping developers deliver rich in-app experiences—including embedded voice and video chat, real-time recording, interactive live streaming, and real-time messaging.</Summary>
+		<!-- Include symbol files (*.pdb) in the built .nupkg -->
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageIcon>icon_128_rbg.png</PackageIcon>
+	</PropertyGroup>
 	<ItemGroup>
 		<AndroidGradleProject Include="../native/build.gradle.kts" Bind="true" Visibile="false">
 			<ModuleName>app</ModuleName>
@@ -26,5 +50,19 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <AndroidLibrary Update="Jars\agorachat_1.3.1.jar" Visible="true" Bind="true" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="LICENSE.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	   <None Include="icon_128_rbg.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 </Project>
