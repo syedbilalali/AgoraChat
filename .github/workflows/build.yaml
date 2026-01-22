@@ -2,9 +2,14 @@ name: Build Master Branch
 on:
   push:
     branches:
-    - master
+     - master
     tags:
       - '*'
+    paths-ignore:
+      - README.md
+  pull_request:
+    branches:
+     - master
     paths-ignore:
       - README.md
 env:
