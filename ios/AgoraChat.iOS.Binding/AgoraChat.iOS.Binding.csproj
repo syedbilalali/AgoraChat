@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net9.0-ios</TargetFramework>
-    <TargetPlatformVersion>18.2</TargetPlatformVersion>
+    <!--<TargetPlatformVersion>18.2</TargetPlatformVersion>-->
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>

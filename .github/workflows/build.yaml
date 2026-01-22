@@ -2,19 +2,22 @@ name: Build Master Branch
 on:
   push:
     branches:
-    - master
+     - master
     tags:
       - '*'
     paths-ignore:
       - README.md
-      - ci_pipeline.yaml
+  pull_request:
+    branches:
+     - master
+    paths-ignore:
+      - README.md
+env:
+  LATEST_NET_VERSION: '9.0.200'  # .NET SDK version
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-15]
-    timeout-minutes: 15
+    runs-on: macos-15
+    timeout-minutes: 30
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -36,6 +39,10 @@ jobs:
         dotnet-version: ${{ env.LATEST_NET_VERSION }}
     - name: Install .NET MAUI Workload
       run: dotnet workload install maui
+    - name: Make gradlew executable
+      run: chmod +x android/native/gradlew
+    - name: Restore dependencies
+      run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release /p:Version=${VERSION}
     # - name: Test
