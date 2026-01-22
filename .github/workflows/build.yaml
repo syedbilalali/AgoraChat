@@ -39,6 +39,8 @@ jobs:
         dotnet-version: ${{ env.LATEST_NET_VERSION }}
     - name: Install .NET MAUI Workload
       run: dotnet workload install maui
+    - name: Make gradlew executable
+      run: chmod +x android/native/gradlew
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
